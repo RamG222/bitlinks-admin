@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add News</title>
+  <style>
+    body { font-family: Arial; margin: 40px; }
+    form { display: flex; flex-direction: column; width: 300px; gap: 10px; }
+    input, textarea { padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+    button { background: #007bff; color: white; padding: 10px; border: none; border-radius: 5px; }
+    button:hover { background: #0056b3; }
+    .msg { margin-top: 15px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>Add News</h2>
+  <form method="POST" action="/add" enctype="multipart/form-data">
+    <input type="text" name="slug" placeholder="Slug" required />
+    <input type="text" name="title" placeholder="Title" required />
+    <input type="text" name="source_url" placeholder="Source URL" required />
+    <textarea name="description" placeholder="Description"></textarea>
+    <input type="file" name="image" required />
+    <button type="submit">Add News</button>
+  </form>
+  <% if (message) { %>
+    <p class="msg"><%= message %></p>
+  <% } %>
+</body>
+</html>
