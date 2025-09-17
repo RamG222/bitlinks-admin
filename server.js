@@ -52,6 +52,12 @@ app.post("/add", upload.single("image"), async (req, res) => {
     }
 
     const id = uuidv4();
+    //check "slug" before inserting
+    const existing = await query("SELECT id FROM news WHERE slug = $1", [slug]);
+    if (existing.rows.length > 0) {
+      throw new Error("Slug already exists. Please choose a different one.");
+    }
+    // Insert into DB
     await query(
       `INSERT INTO news (id, slug, image, title, source_url, description)
        VALUES ($1, $2, $3, $4, $5, $6)`,
