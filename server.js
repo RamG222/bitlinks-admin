@@ -6,6 +6,7 @@ import { query } from "./db.js";
 import { v4 as uuidv4 } from "uuid";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
+import { requestLogger } from "./middleware/logging.js";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ const s3 = new AWS.S3({
 // Middleware
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(requestLogger);
 
 // Form Page
 app.get("/", (req, res) => {
@@ -72,7 +74,7 @@ app.post("/add", upload.single("image"), async (req, res) => {
 });
 
 app.get("/health", (req, res) => {
-  res.status(200).send("OK");
+  res.status(200).send("OK. All systems operational.");
 });
 
 app.listen(PORT, () => {
