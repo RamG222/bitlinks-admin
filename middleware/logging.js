@@ -15,7 +15,9 @@ async function logToDb(level, message, source = "app") {
 // Middleware for logging requests
 function requestLogger(req, res, next) {
   const message = `${req.method} ${req.originalUrl} from ${req.ip}`;
-  logToDb("INFO", message, `http-ip ${req.ip}`);
+  if (req.originalUrl !== "/health") {
+    logToDb("INFO", message, `http-ip ${req.ip}`);
+  }
   next();
 }
 
