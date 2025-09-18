@@ -28,8 +28,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(requestLogger);
 
 // Form Page
-app.get("/", (req, res) => {
-  res.render("form", { message: null });
+app.get("/", async (req, res) => {
+  const result = await query(
+    "SELECT * FROM logs ORDER BY created_at DESC LIMIT 50"
+  );
+  res.render("form", { logs: result.rows, message: null });
 });
 
 // Handle News Submission
@@ -40,7 +43,8 @@ app.post("/add", upload.single("image"), async (req, res) => {
     let imageUrl = null;
 
     if (file) {
-      const key = `${Date.now()}-${file.originalname}`;
+      const ext = file.originalname.split(".").pop();
+      const key = `${slug}.${ext}`;
       await s3
         .putObject({
           Bucket: process.env.R2_BUCKET,
@@ -66,10 +70,10 @@ app.post("/add", upload.single("image"), async (req, res) => {
       [id, slug, imageUrl, title, source_url, description]
     );
 
-    res.render("form", { message: "✅ News added successfully!" });
+    res.render("form", { message: "✅ News added successfully!", logs: [] });
   } catch (err) {
     console.error(err);
-    res.render("form", { message: "❌ Error: " + err.message });
+    res.render("form", { message: "❌ Error: " + err.message, logs: [] });
   }
 });
 

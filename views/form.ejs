@@ -39,6 +39,41 @@
       margin-top: 15px;
       font-weight: bold;
     }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+
+    thead {
+      background-color: #f5f5f5;
+    }
+
+    th,
+    td {
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    th {
+      background-color: #2c3e50;
+      color: #fff;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
   </style>
 </head>
 
@@ -58,6 +93,35 @@
       <%= message %>
     </p>
     <% } %>
+
+      <table class="logs-table">
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Action</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% logs.forEach(function(log) { %>
+            <tr>
+              <td>
+                <%= new Date(log.created_at).toLocaleString() %>
+              </td>
+              <td>
+                <%= log.level %>
+              </td>
+              <td>
+                <%= log.message %>
+              </td>
+              <td>
+                <%= log.source %>
+              </td>
+            </tr>
+            <% }) %>
+        </tbody>
+
+      </table>
 </body>
 
 </html>
