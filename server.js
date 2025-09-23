@@ -10,24 +10,25 @@ import { requestLogger } from "./middleware/logging.js";
 
 dotenv.config();
 
+//------------------------------------------- Middleware
+
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 const PORT = 3000;
 
-// R2 Config
+app.set("view engine", "ejs");
+app.set("trust proxy", true);
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(requestLogger);
+
+// R2 Config-------------------------------------
 const s3 = new AWS.S3({
   endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
   accessKeyId: process.env.R2_ACCESS_KEY_ID,
   secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
   signatureVersion: "v4",
 });
-
-// Middleware
-app.set("view engine", "ejs");
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(requestLogger);
-
-// Form Page
+// Homepage of admin panel Page
 app.get("/", async (req, res) => {
   const result = await query(
     "SELECT * FROM logs ORDER BY created_at DESC LIMIT 50"
