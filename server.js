@@ -33,8 +33,6 @@ app.get("/", async (req, res) => {
   const result = await query(
     "SELECT * FROM logs ORDER BY created_at DESC LIMIT 50"
   );
-  await query("DELETE FROM logs WHERE created_at >= NOW() - INTERVAL '7 days';
-");
   res.render("form", { logs: result.rows, message: null });
 });
 
@@ -72,6 +70,8 @@ app.post("/add", upload.single("image"), async (req, res) => {
        VALUES ($1, $2, $3, $4, $5, $6)`,
       [id, slug, imageUrl, title, source_url, description]
     );
+
+      await query("DELETE FROM logs WHERE created_at >= NOW() - INTERVAL '7 days';");
 
     res.render("form", { message: "✅ News added successfully!", logs: [] });
   } catch (err) {
