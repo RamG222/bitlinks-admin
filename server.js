@@ -33,6 +33,8 @@ app.get("/", async (req, res) => {
   const result = await query(
     "SELECT * FROM logs ORDER BY created_at DESC LIMIT 50"
   );
+  await query("DELETE FROM logs WHERE created_at >= NOW() - INTERVAL '7 days';
+");
   res.render("form", { logs: result.rows, message: null });
 });
 
