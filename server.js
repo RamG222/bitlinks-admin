@@ -71,6 +71,8 @@ app.post("/add", upload.single("image"), async (req, res) => {
       [id, slug, imageUrl, title, source_url, description]
     );
 
+      await query("DELETE FROM logs WHERE created_at >= NOW() - INTERVAL '7 days';");
+
     res.render("form", { message: "✅ News added successfully!", logs: [] });
   } catch (err) {
     console.error(err);
